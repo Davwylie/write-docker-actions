@@ -1,8 +1,6 @@
 name: Docker Actions
 
-on:
-  pull_request:
-    types: [labeled]
+on: [push]
 
 jobs:
   action:
@@ -16,3 +14,11 @@ jobs:
 
       - name: meow
         uses: ./.github/actions/cat-facts
+        id: cat
+
+      - name: create-issue
+        uses: ./.github/actions/issue-maker
+        with:
+          repoToken: ${{secrets.GITHUB_TOKEN}}
+          catFact: ${{steps.cat.outputs.fact}}
+          issueTitle: "a cat fact for you"
